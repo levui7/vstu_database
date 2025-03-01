@@ -1,0 +1,136 @@
+// Таблица Ферма
+Table farm {
+    id int [pk, increment] // Уникальный идентификатор фермы
+    address text // Адрес фермы
+    asset_cost float // Стоимость активов
+    name text // Название фермы
+}
+
+// Таблица Товар
+Table product {
+    id int [pk, increment] // Уникальный идентификатор товара
+    price float // Цена товара
+    category text // Категория товара
+    volume float // Объем товара
+    farm_id int // Внешний ключ на ферму
+    supplier_id int // Внешний ключ на поставщика
+    advertiser_id int // Внешний ключ на рекламодателя
+    market_id int // Внешний ключ на рынок
+    distributor_id int // Внешний ключ на дистрибьютора
+    barn_id int // Внешний ключ на амбар
+    livestock_id int // Внешний ключ на скот
+}
+
+// Таблица Поле
+Table field {
+    id int [pk, increment] // Уникальный идентификатор поля
+    area float // Площадь поля
+    yield float // Урожайность
+    farm_id int // Внешний ключ на ферму
+}
+
+// Таблица Фермер
+Table farmer {
+    id int [pk, increment] // Уникальный идентификатор фермера
+    full_name text // ФИО фермера
+    work_experience int // Опыт работы
+    labor_payment float // Оплата труда
+    farm_id int // Внешний ключ на ферму
+}
+
+// Таблица Оборудование
+Table equipment {
+    id int [pk, increment] // Уникальный идентификатор оборудования
+    condition text // Состояние оборудования
+    cost float // Стоимость оборудования
+    warranty date // Гарантия
+    farm_id int // Внешний ключ на ферму
+}
+
+// Таблица Поставщик
+Table supplier {
+    id int [pk, increment] // Уникальный идентификатор поставщика
+    company_name text // Название компании
+    contact_person text // Контактное лицо
+    email text // Email
+    phone text // Телефон
+    credit_limit float // Кредитный лимит
+    contract_number text // Номер договора
+}
+
+// Таблица Рекламодатель
+Table advertiser {
+    id int [pk, increment] // Уникальный идентификатор рекламодателя
+    company_name text // Название компании
+    contact_person text // Контактное лицо
+    email text // Email
+    phone text // Телефон
+    effectiveness int // Эффективность
+    service_cost float // Стоимость услуги
+}
+
+// Таблица Рынок
+Table market {
+    id int [pk, increment] // Уникальный идентификатор рынка
+    money_volume float // Денежный объем
+    trading_platforms int // Торговые площадки
+    price_category text // Ценовая категория
+    market_segment text // Сегмент рынка
+}
+
+// Таблица Дистрибьютор
+Table distributor {
+    id int [pk, increment] // Уникальный идентификатор дистрибьютора
+    company_name text // Название компании
+    contact_person text // Контактное лицо
+    email text // Email
+    phone text // Телефон
+    sales_volume float // Объем продаж
+    license text // Лицензия
+}
+
+// Таблица Амбар
+Table barn {
+    id int [pk, increment] // Уникальный идентификатор амбара
+    capacity float // Вместимость
+    condition text // Состояние
+    wear_assessment text // Оценка износа
+    farm_id int // Внешний ключ на ферму
+}
+
+// Таблица Скот
+Table livestock {
+    id int [pk, increment] // Уникальный идентификатор скота
+    category text // Категория
+    productivity float // Производительность
+    maintenance_conditions text // Условия содержания
+    feed_volume float // Объем корма
+    quantity int // Количество
+    purpose text // Назначение
+    farm_id int // Внешний ключ на ферму
+}
+
+// Связи между таблицами
+
+// One-to-Many (1:N)
+Ref: product.farm_id < farm.id
+Ref: field.farm_id < farm.id
+Ref: farmer.farm_id < farm.id
+Ref: equipment.farm_id < farm.id
+Ref: barn.farm_id < farm.id
+Ref: livestock.farm_id < farm.id
+
+Ref: product.supplier_id > supplier.id
+Ref: product.advertiser_id > advertiser.id
+Ref: product.market_id > market.id
+Ref: product.distributor_id > distributor.id
+Ref: product.barn_id > barn.id
+Ref: product.livestock_id > livestock.id
+
+// Many-to-Many (N:M)
+Ref: field.id <> farmer.id // Поле и фермер (обрабатывает)
+Ref: field.id <> equipment.id // Поле и оборудование (обрабатывает)
+Ref: farmer.id <> livestock.id // Фермер и скот (обрабатывает)
+
+// One-to-One (1:1)
+Ref: farm.id - barn.id // Ферма и амбар (имеет)
