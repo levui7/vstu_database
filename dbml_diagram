@@ -4,6 +4,8 @@ Table farm {
     address text // Адрес фермы
     asset_cost float // Стоимость активов
     name text // Название фермы
+    market_id int // Взаимодействие с рынками
+    product_id int // Товары фермы
 }
 
 // Таблица Товар
