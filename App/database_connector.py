@@ -9,39 +9,53 @@ def get_connection():
         print(f"Ошибка подключения к БД: {err}")
         return None
 
-# --- Функции для таблицы Farm ---
-def get_all_farms():
-    """Возвращает список всех ферм."""
-    conn = get_connection()
-    if not conn:
-        return []
-    farms_list = []
-    try:
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT id, name, address, asset_cost FROM farm ORDER BY name")
-        farms_list = cursor.fetchall()
-    except mysql.connector.Error as err:
-        print(f"Ошибка получения списка ферм: {err}")
-    finally:
-        if conn.is_connected():
-            cursor.close()
-            conn.close()
-    return farms_list
+# CRUD для advertiser
+from crud_files.crud_advertiser import (
+    create_advertiser,
+    get_all_advertisers,
+    get_advertiser_by_id,
+    update_advertiser,
+    delete_advertiser
+)
 
-def get_farm_details(farm_id=db_farm_id): # По умолчанию берем детали нашей фермы
-    """Возвращает данные указанной фермы."""
-    conn = get_connection()
-    if not conn:
-        return None
-    farm_data = None
-    try:
-        cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT id, name, address, asset_cost FROM farm WHERE id = %s", (farm_id,))
-        farm_data = cursor.fetchone()
-    except mysql.connector.Error as err:
-        print(f"Ошибка получения фермы по ID {farm_id}: {err}")
-    finally:
-        if conn.is_connected():
-            cursor.close()
-            conn.close()
-    return farm_data
+# CRUD для barn
+from crud_files.crud_barn import (
+    create_barn,
+    get_all_barns_for_farm,
+    get_barn_by_id,
+    update_barn,
+    delete_barn
+)
+
+# Урезанные CRUD для farm
+from crud_files.crud_farm import (
+    get_farm_by_id,
+    update_farm_details
+)
+
+# CRUD для farmer
+from crud_files.crud_farmer import (
+    create_farmer,
+    get_all_farmers_for_farm,
+    get_farmer_by_id,
+    update_farmer,
+    delete_farmer
+)
+
+# CRUD для field
+from crud_files.crud_field import (
+    create_field,
+    get_all_fields_for_farm,
+    get_field_by_id,
+    update_field,
+    delete_field
+)
+
+# CRUD для product
+from crud_files.crud_product import (
+    create_product,
+    get_all_products_for_farm,
+    get_product_by_id,
+    update_product,
+    delete_product
+)
